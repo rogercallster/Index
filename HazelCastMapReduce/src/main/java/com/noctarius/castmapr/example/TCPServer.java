@@ -2,73 +2,100 @@ package com.noctarius.castmapr.example;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 	class TCPServer
 	{
 	   
 		   public static void main(String argv[]) throws Exception
 		      {
-			   
-			   
-		         String clientSentence;
+			     String clientSentence;
 		         String capitalizedSentence;
 		         @SuppressWarnings("resource")
-				ServerSocket welcomeSocket = new ServerSocket(7006);
-		         Manager.manager("ftp://storkcloud.org");
-                 int counter  = 0;
-               //busy waiting 
+				ServerSocket welcomeSocket = new ServerSocket(7008);
+		           
+		         Manager.manager("ftp://ftp.freebsd.org");
+		     	// naive way to see for Updates not at all intelligent.. I will change when get time!! 
+                 
 		         while(true) 
 		         {
-		        	 counter ++;
-		        	// naive way to see for Updates not at all intelligent.. I will change when get time!!
-                      
-		        	 if(counter == 100) 		        	 {
-		        		 //this is to call for update in manager
-		        		 Manager.manager("ftp://storkcloud.org");
-		        		 counter =0;
-		         }
+		                 
 		            Socket connectionSocket = welcomeSocket.accept();
+		            
+		            //ideally TCP server should pass client connection to a search handler and listen to new connection
 		            BufferedReader inFromClient =
 		               new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-		            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-		            clientSentence = inFromClient.readLine();
+		               clientSentence = inFromClient.readLine();
 		            
 		            String[] splitArray = clientSentence.split("\\s+");
-		            //"filename"." " . $filename . " " ."perm"." ". $perm . " "."size"." " . $size . " "."time"." " .$time;
-		            String str="";
+		            //CLIENT INPUT : "filename"." " . $filename . " " ."perm"." ". $perm . " "."size"." " . $size . " "."time"." " .$time;
+		            ArrayList<String> str = null;
 		            for(int i =0;i<splitArray.length ;i++)
 		            	{
-		            	if(splitArray[i].equals("filename"))
+		            	if(splitArray[i].equals("filename")&& !(splitArray[++i].equals("perm")))
 		            	 {
-		            		i++;
+		            		
+		            		System.out.println("index list  "+  (splitArray[i])+ "  and attribute index "+AttributeObjects.NAME.getKey(splitArray[i]));
 		            		 str =  UniqueList.getUnique(AttributeObjects.NAME.getKey(splitArray[i]));
-                          //call mapper  method from here  from here        	
+                         }
+		            	
+		            	if(splitArray[i].equals("perm")&& !(splitArray[++i].equals("size")))
+		            	 {
+		            		
+		            		System.out.println("index list "+AttributeObjects.PERM.getKey(splitArray[i]));
+		            		 str =  UniqueList.getUnique(AttributeObjects.PERM.getKey(splitArray[i]));
+                         //call mapper  method from here  from here        	
 		            	 //System.out.println ("Result that is found "+ AttributeObjects.NAME.getKey(splitArray[i]));
 		            	
 		            	 }
+		            	if(splitArray[i].equals("size")&& !(splitArray[++i].equals("time")))
+		            	 {
+		            		
+		            		System.out.println("index list  "+  (splitArray[i])+ "  and attribute index "+AttributeObjects.SIZE.getKey(splitArray[i]));
+		            		str =  UniqueList.getUnique(AttributeObjects.NAME.getKey(splitArray[i]));
+                        }
 		            	
-	            		if(str.length()<0)
+		            	}//END OF ITTERATION OF CLIENT DATA		            	
+		            	
+	            		if(str.size()> 1)
 	            		  {
-	            			String [] mr =new String[2];
-		            		mr[0]= "/home/hduser/Project/readfrm.txt";
-		            	    mr[1]="/home/hduser/Project/results";
+	            			//String [] mr =new String[2];
+		            		//mr[0]= "/home/hduser/Project/readfrm.txt";
+		            	    //mr[1]="/home/hduser/Project/results";
 		            		//MapReduce.mapreduce(mr);
-		            		outToClient.writeBytes(str);
-
-	            		  }
+	            			String st="";
+	            			for(String send : str)
+		            		{
+	            				//outToClient.writeBytes(send);
+		            		st=st.concat(send).concat(" ");
+		            		
+		            		DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+		            		outToClient.writeChars(send);
+		            		
+		            		
+                             
+		            		}
+	            			System.out.println("send this to client  "+st);
+	            			
+	            			//outToClient.writeChars(st);
+	            			//outToClient.close();
 		            	
 		            	}
+	            		//else use MAP reduce for this purpose
+	            		else {  //
+	            			
+	            		}
 		            
 		           System.out.println("Received: " + clientSentence);
 		          //  capitalizedSentence = clientSentence.toUpperCase() ;
 		            
-		           // outToClient.writeBytes(capitalizedSentence);
+		           
 		            
 		             
-		         }
-	         }
+		         }//END OF WHILE LOOP
+	         }//END OF MAIN METHOD
 	      
-	} 
+	} //END OF SERVER
 	
 	
 	

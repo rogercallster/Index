@@ -33,17 +33,18 @@ public class AttributeHash {
                                    return AttrHash.get(Key);                                   
       }
    
-      public  void putKey(String Key, int NewIndex) //Key is the attribute and value is index is Uniqlist index
+      public  void putKey(String string, int NewIndex) //Key is the attribute and value is index is Uniqlist index
           {
                    
-                        IndexList=AttrHash.get(Key);//key is string 
+    	                System.out.println(" new string to be inserted is "+string);
+                        IndexList=AttrHash.get(string);//key is string 
                         
-                                      
+                                                              
                         if(null==IndexList)
                             {
                                 IndexList=new ArrayList<Integer>();   
                                 IndexList.add(NewIndex);
-                                AttrHash.put(Key, IndexList);
+                                AttrHash.put(string, IndexList);
                                 System.out.println();
                                 
                                 
@@ -51,7 +52,7 @@ public class AttributeHash {
                         else
                             {
                                
-                                IndexList=AttrHash.get(Key);
+                                IndexList=AttrHash.get(string);
                                 IndexList.add(NewIndex);
                                                        
                             }

@@ -16,6 +16,7 @@ import java.util.Hashtable;
 	     
 	      public static int addUnqiueList( String value )
 	       {
+	    	  
 	          if((uniqueList.get(value))!=null)
 	              return  uniqueList.get(value);
 	          else
@@ -24,6 +25,7 @@ import java.util.Hashtable;
 	              arrayList.size();
 	              arrayList.add(value);
 	              uniqueList.put(value,((arrayList.size()-1)));
+	              //System.out.println("inside add unique"+ value + "Size of table is " + (arrayList.size()-1));
 	              return ((arrayList.size()-1));
 	          }
 	    //      return index;
@@ -31,27 +33,27 @@ import java.util.Hashtable;
 
 	      // getUnique get array list of all the entries of Attribute hash table and it pasrse through the list
 	      
-	      public static String  getUnique(ArrayList<Integer> arrayList2 ) throws FileNotFoundException, UnsupportedEncodingException
+	      public static ArrayList<String>  getUnique(ArrayList<Integer> arrayList2 ) throws FileNotFoundException, UnsupportedEncodingException
 	      {
 	    	  
+	    	  System.out.println("get unique called ------");
 	    	  if(arrayList2.size()==0)
 	    		  return null;
-	    	  String SendString="";
-	    	  for(int i : arrayList2)
-	    	  { 
-	          
-	    		  System.out.println("NULL");
-	    	 SendString=SendString.concat(arrayList.get(i));
-	    	 SendString=SendString.concat(" ");
-	              System.out.println(arrayList.get(i ));
+	    	  
+	    	  for(int i=0 ; i <  arrayList2.size();i++)   
+	    		  	    	 Buffer.buffer.add(arrayList.get(arrayList2.get(i)));
+	    	 
+//	        System.out.println("Ankur                        "+arrayList.get(arrayList2.get(i)));
+	         
 	              
 	          
-	    	  }
-	    	    PrintWriter writer = new PrintWriter("/home/hduser/Project/readfrm.txt", "UTF-8");
-	              writer.println(SendString);
-	              writer.close();
+	    	 
+	    	  
+	    	    //PrintWriter writer = new PrintWriter("/home/hduser/Project/readfrm.txt", "UTF-8");
+	           //   writer.println(SendString);
+	            //  writer.close();
 	              
-	    	  return SendString;
+	    	  return Buffer.buffer;
 	    	  
 	      }
 	}
